@@ -10,10 +10,7 @@ try{
 	if($isValid->isBracketsBalanced($stringBrackets)){
 		$message = "Brackets are balanced";
 	}
+	echo $message;
 }catch(Exception $e){
-	echo "<pre>";
-	print_r($e);
-	echo "</pre>";
+	print_r($e->getMessage());
 }
-
-echo $message;

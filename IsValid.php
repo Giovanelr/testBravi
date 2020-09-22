@@ -6,7 +6,8 @@
 
 class IsValid{
 
-	private $arrayBrackets = array();
+	private $arrayOfBrackets = array("{","}","[","]","(",")");
+	private $bracketsBalanced = array();
 
 	public function isBracketsBalanced($stringBrackets)
 	{
@@ -15,29 +16,35 @@ class IsValid{
 		}
 
 		for($iB = 0; $iB < strlen($stringBrackets); $iB++){
-			$this->isBracket()
-			$this->arrayBrackets[] = $stringBrackets[$iB];
-			echo"<br>Item:" . $stringBrackets[$iB];
-			$this->itsCloseItemBefore($stringBrackets[$iB]);
-			echo"<br>arrayBrackets";
-			print_r($this->arrayBrackets);
+			if ($this->isBracket($stringBrackets[$iB])) {
+				$this->bracketsBalanced[] = $stringBrackets[$iB];
+				$this->itsCloseItemBefore($stringBrackets[$iB]);
+			}
 		}
 
-		if (empty($this->arrayBrackets)) {
+		if (empty($this->bracketsBalanced)) {
 			return true;
 		}
 		return false;
+	}
+
+	private function isBracket($bracket)
+	{
+		if (!in_array($bracket, $this->arrayOfBrackets)) {
+			throw new Exception("Char isn't a bracket");
+		}
+
+		return true;
 	}
 
 	private function itsCloseItemBefore($bracket)
 	{
 		$removeItem = false;
 
-		$keyItemBefore = count($this->arrayBrackets) - 2;
-		// echo"<br>KeyItemBefore:" . $keyItemBefore;
-		if (isset($this->arrayBrackets[$keyItemBefore])) {
-			$itemBefore = $this->arrayBrackets[$keyItemBefore];
-			echo"<br>ItemBefore:" . $itemBefore;
+		$keyItemBefore = count($this->bracketsBalanced) - 2;
+
+		if (isset($this->bracketsBalanced[$keyItemBefore])) {
+			$itemBefore = $this->bracketsBalanced[$keyItemBefore];
 
 			switch ($bracket) {
 				case '}':
@@ -65,10 +72,10 @@ class IsValid{
 
 	private function removeItem($keyItemRemove)
 	{
-		unset($this->arrayBrackets[$keyItemRemove + 1]);
-		unset($this->arrayBrackets[$keyItemRemove]);
-		echo"<br>Remove o Item";
-		$this->arrayBrackets = array_filter($this->arrayBrackets);
-		$this->arrayBrackets = array_values($this->arrayBrackets);
+		unset($this->bracketsBalanced[$keyItemRemove + 1]);
+		unset($this->bracketsBalanced[$keyItemRemove]);
+
+		$this->bracketsBalanced = array_filter($this->bracketsBalanced);
+		$this->bracketsBalanced = array_values($this->bracketsBalanced);
 	}
 }
